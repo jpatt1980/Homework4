@@ -1,0 +1,47 @@
+---
+title: "Homework 4 - Hodge Podge"
+author: "Jason M. Pattison, ST 588-651 Summer 1 2024"
+format: html
+editor: visual
+---
+
+---
+title: "Homework 4 - Hodge Podge"
+author: "Jason M. Pattison, ST 588-651"
+format: html
+editor: visual
+---
+
+# Homework 4 Assignment Objectives
+
+Task 1 for this homework assignment is practice with answering the types of questions that will be asked on the next exam. 
+
+Task 2 of the assignment involves writing R functions manually create functions that generate the Root Mean Square Error (RMSE) and Mean Absolute Deviation (MAE) given a set of response values. 
+
+Task 3 of the assignment focuses on querying an API and writing a function that queries the API and
+
+##Task 1: Conceptual Questions
+
+1.  What is the purpose of the lapply() function? What is the equivalent purrr function?
+
+    > Answer
+
+2.  Suppose we have a list called my_list. Each element of the list is a numeric data frame (all columns are numeric). We want use lapply() to run the code cor(numeric_matrix, method = "kendall") on each element of the list. Write code to do this below! (I’m really trying to ask you how you specify method = "kendall" when calling lapply())
+
+    > Answer
+
+3.  What are two advantages of using purrr functions instead of the BaseR apply family?
+
+    > Answer
+
+4.  What is a side-effect function?
+
+    > Answer
+
+5.  Why can you name a variable sd in a function and not cause any issues with the sd function?
+
+    > The sd() function is global throughout R (via R packages) while sd is a temporary variable that is local to the funciton it is in. Once the code is finished running, the variable sd does not exist.
+
+## Task 2: Writing R Functions
+
+## Task 3: Querying an API and a Tidy-Style Function
