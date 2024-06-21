@@ -5,13 +5,6 @@ format: html
 editor: visual
 ---
 
----
-title: "Homework 4 - Hodge Podge"
-author: "Jason M. Pattison, ST 588-651"
-format: html
-editor: visual
----
-
 # Homework 4 Assignment Objectives
 
 Task 1 for this homework assignment is practice with answering the types of questions that will be asked on the next exam.
@@ -20,28 +13,130 @@ Task 2 of the assignment involves writing R functions manually create functions 
 
 Task 3 of the assignment focuses on querying an API and writing a function that queries the API and
 
-##Task 1: Conceptual Questions
+## Task 1: Conceptual Questions
 
 1.  What is the purpose of the lapply() function? What is the equivalent purrr function?
 
-    > The purpose `lapply()` is to apply a function to all variables in a data frame. lapply`treats the variables in data frames as a list, and applies a called function to all objects in the list.  The equivalent purrr function to`lapply`is`map()\`.
+    > The purpose `lapply()` is to apply a function to all variables in a data frame. `lapply`treats the variables in data frames as a list, and applies a called function to all objects in the list. The equivalent purrr function to`lapply()`is`map()`.
 
 2.  Suppose we have a list called my_list. Each element of the list is a numeric data frame (all columns are numeric). We want use lapply() to run the code cor(numeric_matrix, method = "kendall") on each element of the list. Write code to do this below! (I’m really trying to ask you how you specify method = "kendall" when calling lapply())
 
-    > lapply(df, cor(numeric_matrix, method = "kendall"))
+    > lapply(my_list, cor(numeric_matrix, method = "kendall"))
 
 3.  What are two advantages of using purrr functions instead of the BaseR apply family?
 
-    > `map()` requires less coding to use
+    > `map()` is more consistent and has additional helper funcitons for use in analysis
 
 4.  What is a side-effect function?
 
-    > Answer
+    > A side-effect funciton is one where the state of the data is changed while returning a value. Some examples are `print()` and `plot()` where the function takes the data and creates the different outputs.
 
 5.  Why can you name a variable sd in a function and not cause any issues with the sd function?
 
-    > The sd() function is global throughout R (via R packages) while sd is a temporary variable that is local to the funciton it is in. Once the code is finished running, the variable sd does not exist.
+    > The sd() function is global throughout R (via R packages). When use inside of a function, `sd` is a temporary variable that is local to the funciton it is in. Once the functioncode is finished running, the variable sd does not exist.
 
 ## Task 2: Writing R Functions
+
+Step 1 of this task is to write a basic function called `getRMSE()` that takes in a vector of responses, a vector of predictions, and outputs the RMSE. 
+
+```{r write the RMSE function}
+
+# name the function "getRMSE", define "x" as our response values and "y" as our predicted values. 
+
+getRMSE <- function(x, y) {
+
+
+# generate the loop required to subtract each predicted value from the corresponding response value.
+
+  for (i in x) {  
+
+
+# subtract the predicted values from the observed values, square the difference, sum the values, establish the mean of the sum, then take the square root of the mean. 
+# The order of which variable is subtracted from which doesn't matter due to squaring the difference for each iteration of the loop. 
+    
+  diff_sq <- ((x - y)**2)
+
+  } 
+
+  RMSE <- sqrt(mean(sum(diff_sq)))
+
+    
+  # output the result
+  RMSE
+}
+
+```
+
+2. Run the code provided to create vectors of response values and predicted values. Use these vectors to test `getRMSE`.When writing the function, we want the `mean()` to replace any NA values in the response
+
+```{r testing the RMSE function}
+
+set.seed(10)
+n <- 100
+x <- runif(n)
+resp <- 3 + 10*x + rnorm(n)
+pred <- predict(lm(resp ~ x), data.frame(x))
+
+
+getRMSE <- function(x, y) {
+  for (i in x) {  
+    diff_sq <- ((x - y)**2)
+  } 
+
+  RMSE <- sqrt(mean(sum(diff_sq)))
+
+    
+  # output the result
+  RMSE
+}
+
+getRMSE(resp, pred)
+
+```
+Now that we have successfully tested our function, we are going to replace two response values with missing values using (NA_real_), then test `getRMSE` function with and without specifying behavior to deal with missing values. 
+
+First we will test getRMSE without specifying behavior to deal with the missing values. We will save the results of this test as `RMSE_NA_without_specs`. 
+
+```{r replace response values, run getRMSE}
+
+# replace two response values, create new response vector so as to not overwrite original data. 
+
+replace_values <- c(resp[1], resp[100])
+
+resp_2 <- replace(resp, resp %in% replace_values, NA_real_)
+
+
+#test getRMSE without specifying behavior
+
+RMSE_NA_without_specs <- getRMSE(resp_2, pred)
+
+```
+
+Running the new vector through `getRMSE` produces the result of "NA". This is due to the two NA values in the response variable not being something we can compute. 
+
+To correct this, we will add code to `getRMSE` that will replace any NA values in an analyzed vector with the mean of the vector's other values. We will call the updated function `getRMSE_2`. 
+
+```{r}
+
+#update getRMSE to account for missing data in response variable, call the updated function getRMSE_2
+
+getRMSE_2 <- function(x, y) {
+  x <- replace(x, is.na(x), mean(x, na.rm = TRUE))
+  for (i in x) {  
+    diff_sq <- ((x - y)**2)
+  } 
+
+  RMSE <- sqrt(mean(sum(diff_sq)))
+
+    
+  # output the result
+  RMSE
+}
+
+getRMSE_2(resp_2, pred)
+
+
+```
+
 
 ## Task 3: Querying an API and a Tidy-Style Function
