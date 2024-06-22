@@ -37,9 +37,11 @@ Task 3 of the assignment focuses on querying an API and writing a function that 
 
 ## Task 2: Writing R Functions
 
-Step 1 of this task is to write a basic function called `getRMSE()` that takes in a vector of responses, a vector of predictions, and outputs the RMSE. 
+### 2.1. Write `getRMSE`
 
-```{r write the RMSE function}
+Step 1 of this task is to write a basic function called `getRMSE()` that takes in a vector of responses, a vector of predictions, and outputs the RMSE.
+
+```{r write the getRMSE function}
 
 # name the function "getRMSE", define "x" as our response values and "y" as our predicted values. 
 
@@ -55,35 +57,55 @@ getRMSE <- function(x, y) {
 # The order of which variable is subtracted from which doesn't matter due to squaring the difference for each iteration of the loop. 
     
   diff_sq <- ((x - y)**2)
-
+ 
   } 
 
-  RMSE <- sqrt(mean(sum(diff_sq)))
+  
+# take the square root of the mean of the diff_sq, this is the RMSE
+  
+  RMSE <- sqrt(mean(diff_sq))
 
     
   # output the result
   RMSE
 }
 
+
+# quickly test the function using 10 through 100 by ten as the response and the mean as the predicted value for each response to ensure there are no error codes
+x_test <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
+y_test <- c(55, 55, 55, 55, 55, 55, 55, 55, 55, 55)
+
+getRMSE(x_test, y_test)
+
 ```
+The generic run of our function did not produce an error code, so we're ready to move on to step 2. 
 
-2. Run the code provided to create vectors of response values and predicted values. Use these vectors to test `getRMSE`.When writing the function, we want the `mean()` to replace any NA values in the response
 
-```{r testing the RMSE function}
+### 2.2. Test `getRMSE`
+
+Step 2 of this task is to generate response and predicted values for x, then process those values through our `getRMSE` function. 
+
+First we will run the code provided in our assignment to create vectors of response values and predicted values. We will title these vectors `resp` and `pred` respectively.
+
+```{r create response and predicted values}
 
 set.seed(10)
 n <- 100
 x <- runif(n)
 resp <- 3 + 10*x + rnorm(n)
 pred <- predict(lm(resp ~ x), data.frame(x))
+```
 
+Next we will test our function using the values we created for `resp` and `pred`. 
+
+```{r testing the getRMSE function}
 
 getRMSE <- function(x, y) {
   for (i in x) {  
     diff_sq <- ((x - y)**2)
   } 
 
-  RMSE <- sqrt(mean(sum(diff_sq)))
+  RMSE <- sqrt(mean(diff_sq))
 
     
   # output the result
@@ -93,30 +115,32 @@ getRMSE <- function(x, y) {
 getRMSE(resp, pred)
 
 ```
-Now that we have successfully tested our function, we are going to replace two response values with missing values using (NA_real_), then test `getRMSE` function with and without specifying behavior to deal with missing values. 
 
-First we will test getRMSE without specifying behavior to deal with the missing values. We will save the results of this test as `RMSE_NA_without_specs`. 
+Now that we have successfully tested our function, we are going to replace two response values with missing values using (NA_real\_). We will call this new response vector `resp_NA`.
 
-```{r replace response values, run getRMSE}
-
-# replace two response values, create new response vector so as to not overwrite original data. 
-
+```{r replace 2 response values}
 replace_values <- c(resp[1], resp[100])
 
-resp_2 <- replace(resp, resp %in% replace_values, NA_real_)
+resp_NA <- replace(resp, resp %in% replace_values, NA_real_)
+```
 
+Next we will test our `getRMSE` function to determine how it responds with and without adding code to address the missing values in `resp_NA`. 
 
-#test getRMSE without specifying behavior
+First we will test getRMSE without specifying behavior to deal with the missing values. We will save the results of this test as `RMSE_NA_without_specs`.
 
-RMSE_NA_without_specs <- getRMSE(resp_2, pred)
+```{r run getRMSE with resp_NA}
+
+RMSE_NA_without_specs <- getRMSE(resp_NA, pred)
+
+RMSE_NA_without_specs
 
 ```
 
-Running the new vector through `getRMSE` produces the result of "NA". This is due to the two NA values in the response variable not being something we can compute. 
+Running the new vector through `getRMSE` produces the result of "NA". This is due to the two NA values in the response variable not being suitable for computations, even while being numeric values themselves. 
 
-To correct this, we will add code to `getRMSE` that will replace any NA values in an analyzed vector with the mean of the vector's other values. We will call the updated function `getRMSE_2`. 
+To correct this, we will add code to `getRMSE` that will replace any NA values in an analyzed vector with the mean of the vector's other values. We will call the updated function `getRMSE_2`.
 
-```{r}
+```{r add code to RMSE to account for NAs}
 
 #update getRMSE to account for missing data in response variable, call the updated function getRMSE_2
 
@@ -126,17 +150,226 @@ getRMSE_2 <- function(x, y) {
     diff_sq <- ((x - y)**2)
   } 
 
-  RMSE <- sqrt(mean(sum(diff_sq)))
+  RMSE <- sqrt(mean(diff_sq))
 
     
   # output the result
   RMSE
 }
 
-getRMSE_2(resp_2, pred)
+getRMSE_2(resp_NA, pred)
 
 
 ```
 
+### 2.3. Write `getMAE`
+
+Similar to our `getRMSE` function, we will utilize a loop function to generate the iterative values of x[i] and y[i] in order to calculate the difference between them. Next we will take the absolute difference of these values, then determine their mean in order to determine the Mean Absolute Deviaton (MAE). 
+```{r}
+getMAE <- function(x, y) {
+  for(i in x) {
+    abs_diff <- abs(x-y)
+  }
+  
+  MAE <- mean(abs_diff)
+  
+  MAE
+}
+
+getMAE(x_test, y_test)
+```
+
+Conducting a generic test using the `x_test` and `y_test` vectors shows that the function did not produce an error. We are ready to further test our function. 
+
+### 2.4. Test `getMAE`
+Next, we will use the code provided go generate vectors `resp`` and `pred`. Seeing that this is the same code we used in Step 2, and that we did not alter these vectors in Step 2.2, we can safely pass these vectors through our `getMAE` function. 
+
+```{r}
+getMAE(resp, pred)
+
+```
+
+We will now attempt to reproduce our resutlts using a response data set that has missing values. This is the same test we previous did for `getRMSE`, so we will use the response vector `resp_NA` to further test `getMAE`. 
+
+```{r}
+getMAE(resp_NA, pred)
+```
+
+Like with our initial test of passing missing values through `getRMSE`, `get MAE` provides the result of "NA" due to the NA values. 
+
+We will now modify the function code to account for NA values, then retest the function using `resp_NA`
+
+```{r}
+getMAE_2 <- function(x, y) {
+  x <- replace(x, is.na(x), mean(x, na.rm = TRUE))
+  for(i in x) {
+    abs_diff <- abs(x-y)
+  }
+  
+  MAE <- mean(abs_diff)
+  
+  MAE
+}
+
+getMAE_2(resp_NA, pred)
+```
+
+
+### 2.5. Generate wrapper function `getRMSE_MAE`
+
+Now that we have established that our `getRMSE` and `getMAE` functions work properly, we will use them as helper functions inside of a wrapper function `getRMSE_MAE` that can be used to return either `getRMSE`, `getMAE`, or both results. When returning the values, we will give them appropriate names to ensure we know which result applies to which statistic. 
+
+First we will generate the function, then test it using generic data to ensure it works without errors. 
+
+```{r wrapper for RMSE and MAE}
+
+getRMSE_MAE <- function(x, y, stat = "both") {
+  
+  if(!is.atomic(x) | !is.atomic(y)) {
+    print("The data is not atomic")
+    
+  }
+  
+  
+  if(!is.numeric(x) | !is.numeric(y)) {
+    print("The data is not numeric")
+   
+  }
+  
+  
+  if(!is.vector(x) | !is.vector(y)) {
+    print("The data is not a vector")
+    
+  }
+  
+  
+  RMSE <- getRMSE_2(x,y)
+  MAE <- getMAE_2(x,y)
+  
+  if(stat == "both") {
+    list("RMSE" = RMSE, "MAE" = MAE)
+  } else if(stat == "RMSE") {
+      list("RMSE" = RMSE)
+  } else if(stat == "MAE") {
+      list("MAE" = MAE)
+  }
+  
+
+}
+
+getRMSE_MAE(x_test, y_test)
+```
+
+The function appears to be operational, so we are read to move on to the next step. 
+
+### 2.6. Test the new wrapper function. 
+
+Use the provided code to generate response and prediction variables for use. 
+```{r}
+set.seed(10)
+n <- 100
+x <- runif(n)
+resp <- 3 + 10*x + rnorm(n)
+pred <- predict(lm(resp ~ x), data.frame(x))
+```
+
+Next, test the wrapper function using the data. Call it once for each metric individually, then once specifying both metrics. 
+
+First we will call only the `RMSE` value by explicitly writing it in the function values. 
+
+```{r wrapper call RMSE}
+getRMSE_MAE(resp, pred, "RMSE")
+```
+
+Next we will call only the `MAE` value by explicitly writing it in the function values
+
+```{r wrapper call MAE}
+getRMSE_MAE(resp, pred, "MAE")
+```
+
+Now we will call both `RMSE` and `MAE`. Because we have set the default value for `statistic` as "both", we will only input the resposne and predicted values. 
+
+```{r wrapper call RMSE and MAE}
+getRMSE_MAE(resp, pred)
+```
+
+
+Repeat with replacing two of the response values with missing values using `NA_real_`. 
+
+Replace response values with NA. Instead of re-creating a vector of missing values, we will re-use the vector `resp_NA`, with values listed here. 
+
+```{r replace response values}
+resp_NA
+```
+
+We will now process `resp_NA` through `getRMSE_MAE` to determine if the function will process the data. 
+```{r execute wrapper with NA vector}
+getRMSE_MAE(resp_NA, pred)
+```
+We see that our function works properly, which is not how the homework is written fro this step. 
+
+Because we used the functions `getRMSE_2` and `getMAE_2` (which have code written in them to account for missing values) when writing `getRMSE_MAE`, we did not receive the expected "NA" responses for both RMSE and MAE. 
+
+Now, we will test the function by using incorrect data type (i.e. a data frame instead of a vector).
+
+First we will generate a data frame using the response and predicted variables, and name it `resp_df`
+
+```{r}
+resp_df <- list(resp, pred)
+
+```
+
+Attempt to process the data frame through `getRMSE_MAE`. 
+```{r}
+getRMSE_MAE(resp_df, pred)
+```
+
 
 ## Task 3: Querying an API and a Tidy-Style Function
+
+API Key for read-in is:
+
+b5c4c79305fb46db9e6212948cdf50e0
+
+### 3.1. Use GET() to return information about a topic that has been in the news lately
+
+```{r use GET() to return topic information}
+site_raw_data <- httr::GET("https://newsapi.org/v2/everything?q=Caitlin%20Clark&from=2024-06-01&sortBy=popularity&apiKey=b5c4c79305fb46db9e6212948cdf50e0")
+```
+
+### 3.2. Parse the returned information into a data frame with the article information in it
+
+```{r parse the topic information into a tibble}
+parsed <- jsonlite::fromJSON(rawToChar(site_raw_data$content))
+
+articles <- as_tibble(parsed$articles) |>
+  filter(title != "[Removed]")
+
+articles
+```
+
+
+### 3.3. Write a funciton that allows the user to easily query the API using inputs for the title/subject, a time period for the search, and an API key. 
+
+```{r write an API query function}
+
+getArticles <- function(subject, date_start, APIkey) {
+  
+  subject <- sub(" ", "%20", subject)
+
+sitestring <-  httr::GET(str_c("https://newsapi.org/v2/everything?q=", subject, "&from=", date_start, "&sortBy=popularity&apiKey=", APIkey)) 
+
+parsed <- jsonlite::fromJSON(rawToChar(sitestring$content))
+
+articles <- as_tibble(parsed$articles) |>
+  filter(title != "[Removed]")
+
+articles
+
+}
+
+getArticles("Michael Jordan", "2024-06-01", "b5c4c79305fb46db9e6212948cdf50e0")
+
+
+
+```
