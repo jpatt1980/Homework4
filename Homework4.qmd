@@ -147,17 +147,15 @@ list("response_NA" = resp_NA)
 
 Next we will test our `getRMSE` function to determine how it responds with and without adding code to address the missing values in `resp_NA`.
 
-First we will test getRMSE without specifying behavior to deal with the missing values. We will save the results of this test as `RMSE_NA_no_specs`.
+First we will test getRMSE without specifying behavior to deal with the missing values. .
 
 ```{r run getRMSE with resp_NA}
 
-RMSE_NA_no_specs <- getRMSE(resp_NA, pred)
-
-list("RMSE_without_NA_specs" = RMSE_NA_no_specs)
+getRMSE(resp_NA, pred)
 
 ```
 
-Running `resp_NA`` through `getRMSE` produces the result of "NA". This is due to the two NA values in the response variable not being suitable for computations, even while being numeric values themselves.
+Running `resp_NA` through `getRMSE` produces the result of "NA". This is due to the two NA values in the response variable not being suitable for computations, even while being numeric values themselves.
 
 To correct this, we will add code to `getRMSE` that will replace any NA values in an analyzed vector with the mean of the vector's other values. We will call the updated function `getRMSE_2`.
 
@@ -206,7 +204,7 @@ Conducting a generic test using the `x_test` and `y_test` vectors shows that the
 
 ### 2.4. Test `getMAE`
 
-Next, we will use the code provided to again generate vectors ` resp` and `pred`. Seeing that this is the same code we used in Step 2, and that we did not alter these vectors in Step 2.2, we can safely pass these vectors through our`getMAE` function.
+Next, we will use the code provided to again generate vectors ` resp` and `pred`. Seeing that this is the same code we used in Step 2, and that we did not alter either of the vectors in Step 2.2, we can safely pass these vectors through our`getMAE` function.
 
 ```{r test getMAE using response and predicted data}
 
@@ -222,9 +220,9 @@ getMAE(resp_NA, pred)
 
 ```
 
-Like with our initial test of passing missing values through `getRMSE`, `get MAE` provides the result of "NA" due to the NA values.
+Like with our initial test of passing missing values through `getRMSE`, `getMAE` provides the result of "NA" due to the NA values.
 
-We will now modify the function code to account for NA values, then retest the function using `resp_NA`
+We will now modify the function code to account for NA values, then retest the function using `resp_NA`.
 
 ```{r update getMAE code to account for missing data and retest}
 
@@ -246,7 +244,7 @@ getMAE_2(resp_NA, pred)
 
 ### 2.5. Generate wrapper function `getRMSE_MAE`
 
-Now that we have established that our `getRMSE` and `getMAE` functions work properly, we will use them as helper functions inside of a wrapper function `getRMSE_MAE` that can be used to return either `getRMSE`, `getMAE`, or both results. 
+Now that we have established that our `getRMSE` and `getMAE` functions work properly, we will use them as helper functions inside of a wrapper function `getRMSE_MAE` that can be used to return either the RMSE, the MAE, or both results. 
 
 When returning the values, we will give them appropriate names to ensure we know which result applies to which statistic. We will generate the function returning both statistics as the default value. 
 
@@ -301,21 +299,17 @@ The function appears to be operational, so we are read to move on to the next st
 
 ### 2.6. Test the new wrapper function.
 
-We will again use the provided code to generate response and prediction variables for use in testing our wrapper funciton. 
+We will again use the provided code to generate response (`resp`) and prediction (`pred`) variables for use in testing our wrapper function. 
 
-```{r}
-
-set.seed(10)
+> set.seed(10)
 n <- 100
 x <- runif(n)
 resp <- 3 + 10*x + rnorm(n)
 pred <- predict(lm(resp ~ x), data.frame(x))
 
-list("response" = resp, "predicted" = pred)
+Because this is the same code we used earlier in this report, and we have not modified either of the vectors earlier throughout the report, we can safely process them through `getRMSE_MAE`.
 
-```
-
-Next, we will test the wrapper function using the data we just generated. We will use `getRMSE_MAE` once to output each statistic individually, then once to output both statistics together.
+We will use `getRMSE_MAE` once to output each statistic individually, then once to output both statistics together.
 
 First we will output the `RMSE` value by explicitly listing it in the function values.
 
@@ -341,15 +335,11 @@ getRMSE_MAE(resp, pred)
 
 ```
 
-We will now repeat this process after replacing two of the response values with missing values using `NA_real_`. Instead of re-creating a vector with missing values, we will re-use the vector `resp_NA`. Recall, `resp_NA`'s values are:
+We will now repeat this process after replacing two of the response values with missing values using `NA_real_`.
 
-```{r replace response values}
+This is the same process we used earlier in this report to generate our vector `resp_NA`. Because we have not modified `resp_NA` earlier throughout the report, we can safely process it through `getRMSE_MAE`.
 
-list("response_NA" = resp_NA)
-
-```
-
-Processing `resp_NA`'s values through `getRMSE_MAE` generates resulting outputs: .
+Processing `resp_NA`'s values through `getRMSE_MAE` generates resulting outputs .
 
 ```{r execute wrapper with NA vector}
 
@@ -357,14 +347,17 @@ getRMSE_MAE(resp_NA, pred)
 
 ```
 
-Which is not how the homework is written for this step. Our function works properly while the homework is written in a way that suggests that "NA" responses for both `RMSE` and `MAE` should have generated. 
+Which is not how the homework is written for this step. Our function works properly while the homework is written in a way that suggests that "NA" responses for both RMSE and MAE should have generated. 
 
-We did not receive the expected "NA" responses for both outputs because we used our improved functions `getRMSE_2` and `getMAE_2` when writing `getRMSE_MAE`. Both of these helper functions have code written in them to account for missing values, resulting in the RMSE and MAE values being output instead of "NA".
+We did not receive the expected "NA" responses for both outputs because we used our improved functions `getRMSE_2` and `getMAE_2` when writing `getRMSE_MAE`. Both of these helper functions have code written in them to replace missing values with the mean of the other values in the vector. This resulted in the RMSE and MAE values being output instead of "NA".
 
-Finally, we will test the function by using incorrect data type (i.e. a data frame instead of a vector). To do this, we will first generate a data frame using the response and predicted variables, and name it `resp_df`
+Finally, we will test the function by using an incorrect data type, a data frame instead of a vector, for one of our funciton inputs. To do this, we will first generate a data frame using the response and predicted variables, and name it `resp_df`. 
 
 ```{r generate data frame for conditional response testing}
-resp_df <- list("response" = resp, "predicted" = pred)
+
+resp_list <- list("response" = resp, "predicted" = pred)
+
+resp_df <- as.tibble(resp_list)
 
 str(resp_df)
 
