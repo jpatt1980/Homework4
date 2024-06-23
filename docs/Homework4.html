@@ -446,7 +446,7 @@ $predicted
 <h3 class="anchored" data-anchor-id="generate-wrapper-function-getrmse_mae">2.5. Generate wrapper function <code>getRMSE_MAE</code></h3>
 <p>Now that we have established that our <code>getRMSE</code> and <code>getMAE</code> functions work properly, we will use them as helper functions inside of a wrapper function <code>getRMSE_MAE</code> that can be used to return either the RMSE, the MAE, or both results.</p>
 <p>When returning the values, we will give them appropriate names to ensure we know which result applies to which statistic. We will generate the function returning both statistics as the default value.</p>
-<p>Additionally, we will encase the function code inside of a <code>try()</code> function. This is necessary for our function to test if the input values are atomic, numeric, and vectors then output a user generated error message and exit the function if these conditions aren’t met. Using <code>try()</code> allows the program to identify an issue with a single use of the function without preventing the remaining code chunks throughout the program from executing.</p>
+<p>Additionally, we will encase the function code inside of a <code>try()</code> function. This is necessary for <code>getRMSE_MAE</code> to test if the input values are atomic, numeric, and vectors then output a user generated error message and exit the function if any of these conditions aren’t met. Using <code>try()</code> allows the program to identify an issue with a single use of the function without preventing the remaining code chunks throughout the program from executing.</p>
 <p>First we will generate the function, then test it using our <code>x_test</code> and <code>y_test</code> generic data to ensure the function works without errors.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>getRMSE_MAE <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">stat =</span> <span class="st">"both"</span>) {</span>
@@ -502,7 +502,10 @@ $MAE
 <h3 class="anchored" data-anchor-id="test-the-new-wrapper-function.">2.6. Test the new wrapper function.</h3>
 <p>We will again use the provided code to generate response (<code>resp</code>) and prediction (<code>pred</code>) variables for use in testing our wrapper function.</p>
 <blockquote class="blockquote">
-<p>set.seed(10) n &lt;- 100 x &lt;- runif(n) resp &lt;- 3 + 10*x + rnorm(n) pred &lt;- predict(lm(resp ~ x), data.frame(x))</p>
+<p>set.seed(10)</p>
+<p>n &lt;- 100 x &lt;- runif(n)</p>
+<p>resp &lt;- 3 + 10*x + rnorm(n)</p>
+<p>pred &lt;- predict(lm(resp ~ x), data.frame(x))</p>
 </blockquote>
 <p>Because this is the same code we used earlier in this report, and we have not modified either of the vectors earlier throughout the report, we can safely process them through <code>getRMSE_MAE</code>.</p>
 <p>We will use <code>getRMSE_MAE</code> once to output each statistic individually, then once to output both statistics together.</p>
@@ -533,8 +536,8 @@ $MAE
 [1] 0.8155776</code></pre>
 </div>
 </div>
-<p>We will now repeat this process after replacing two of the response values with missing values using <code>NA_real_</code>.</p>
-<p>This is the same process we used earlier in this report to generate our vector <code>resp_NA</code>. Because we have not modified <code>resp_NA</code> earlier throughout the report, we can safely process it through <code>getRMSE_MAE</code>.</p>
+<p>We will now repeat testing `getRMSE_MAE` after replacing two of the response values with missing values using <code>NA_real_</code>.</p>
+<p>This is the same process we used earlier in this report to generate our vector <code>resp_NA</code>. Because we have not modified <code>resp_NA</code> earlier throughout this report, we can safely process it through <code>getRMSE_MAE</code>.</p>
 <p>Processing <code>resp_NA</code>’s values through <code>getRMSE_MAE</code> generates resulting outputs .</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp_NA, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -552,13 +555,9 @@ $MAE
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>resp_list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"response"</span> <span class="ot">=</span> resp, <span class="st">"predicted"</span> <span class="ot">=</span> pred)</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>resp_df <span class="ot">&lt;-</span> <span class="fu">as.tibble</span>(resp_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: `as.tibble()` was deprecated in tibble 2.0.0.
-ℹ Please use `as_tibble()` instead.
-ℹ The signature and semantics have changed, see `?as_tibble`.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(resp_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>resp_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(resp_list)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(resp_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>tibble [100 × 2] (S3: tbl_df/tbl/data.frame)
  $ response : num [1:100] 7.67 5.73 8.64 12.07 4.36 ...
@@ -568,27 +567,27 @@ $MAE
 </div>
 <p>Then we will attempt to process the data frame through <code>getRMSE_MAE</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp_df, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp_df, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "The data is not atomic"
 Error in try({ : no loop for break/next, jumping to top level</code></pre>
 </div>
 </div>
-<p>We see that our screening criteria worked properly, generating an output message while displaying where the error in the function occurred. This error occurred due to the <code>if</code> statement testing <code>!is.atomic()</code> being <code>TRUE</code>, causing the <code>break</code> function to be executed.</p>
+<p>We see that our screening criteria worked properly, generating an output message while displaying where the error in the function occurred. This error occurred due to the <code>if</code> statement testing <code>!is.atomic()</code> being <code>TRUE</code>, causing the associated <code>break</code> command to be executed.</p>
 </section>
 </section>
 <section id="task-3-querying-an-api-and-a-tidy-style-function" class="level2">
 <h2 class="anchored" data-anchor-id="task-3-querying-an-api-and-a-tidy-style-function">Task 3: Querying an API and a Tidy-Style Function</h2>
 <section id="using-get" class="level3">
 <h3 class="anchored" data-anchor-id="using-get">3.1. Using GET()</h3>
-<p>Use <code>GET()</code> from the <code>httr</code> package to return information about a topic that has been in the news lately. To do this, we will use the default value of “/v2/everything” in our URL to ensure we return the maximum number of articles.</p>
+<p>Using <code>GET()</code> from the <code>httr</code> package, we will pull information from the “newsapi.org” website about a topic that has been in the news lately and store the information in variable `site_raw_data`.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>site_raw_data <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">GET</span>(<span class="st">"https://newsapi.org/v2/everything?q=Apple&amp;from=2024-06-01&amp;sortBy=popularity&amp;apiKey=b5c4c79305fb46db9e6212948cdf50e0"</span>)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>site_raw_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>site_raw_data <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">GET</span>(<span class="st">"https://newsapi.org/v2/everything?q=Apple&amp;from=2024-06-01&amp;sortBy=popularity&amp;apiKey=b5c4c79305fb46db9e6212948cdf50e0"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>site_raw_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Response [https://newsapi.org/v2/everything?q=Apple&amp;from=2024-06-01&amp;sortBy=popularity&amp;apiKey=b5c4c79305fb46db9e6212948cdf50e0]
-  Date: 2024-06-23 18:22
+  Date: 2024-06-23 18:45
   Status: 200
   Content-Type: application/json; charset=utf-8
   Size: 67.7 kB</code></pre>
@@ -598,16 +597,20 @@ Error in try({ : no loop for break/next, jumping to top level</code></pre>
 </section>
 <section id="parse-the-returned-information" class="level3">
 <h3 class="anchored" data-anchor-id="parse-the-returned-information">3.2. Parse the returned information</h3>
-<p>Next we are going to parse our variable <code>site_raw_data</code> into a data frame with the article information in it. When creating the data frame, we will ensure that the title, author, and description of the articles are first. We will also ensure the code omitsany articles that may have been removed by the host site and sorts the remaining results to ensure the most recent articles are listed first.</p>
+<p>Next we are going to parse our created variable <code>site_raw_data</code> into a data frame with the article information in it. When creating the data frame, we will ensure that the title, author, and description of the articles are listed first. We will also ensure to omit articles from our search that may have been removed by the host site. Lastly, we will sort the results to ensure the most recent articles are listed first.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>parsed <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(site_raw_data<span class="sc">$</span>content))</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  articles <span class="ot">&lt;-</span> <span class="fu">as.tibble</span>(parsed<span class="sc">$</span>articles) <span class="sc">|&gt;</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(title, author, description, <span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(title <span class="sc">!=</span> <span class="st">"[Removed]"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(publishedAt))</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>articles</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>parsed <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(site_raw_data<span class="sc">$</span>content))</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  articles <span class="ot">&lt;-</span> <span class="fu">as.tibble</span>(parsed<span class="sc">$</span>articles) <span class="sc">|&gt;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(title, author, description, <span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(title <span class="sc">!=</span> <span class="st">"[Removed]"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(publishedAt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `as.tibble()` was deprecated in tibble 2.0.0.
+ℹ Please use `as_tibble()` instead.
+ℹ The signature and semantics have changed, see `?as_tibble`.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>articles</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 76 × 8
    title       author description source$id url   urlToImage publishedAt content
@@ -669,7 +672,7 @@ Error in try({ : no loop for break/next, jumping to top level</code></pre>
 # ℹ 1 more variable: source$name &lt;chr&gt;</code></pre>
 </div>
 </div>
-<p>We see that our inital code works, so let’s test it out two times using more complicated entries.</p>
+<p>We see that our initial code works, so let’s test it out two times using more complicated title/subject entries.</p>
 <p>Searching for “Caitlin Clark”</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getArticles</span>(<span class="st">"Caitlin Clark"</span>, <span class="st">"2024-06-10"</span>, <span class="st">"b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -691,24 +694,24 @@ Error in try({ : no loop for break/next, jumping to top level</code></pre>
 # ℹ 1 more variable: source$name &lt;chr&gt;</code></pre>
 </div>
 </div>
-<p>Searching for “us heat wave”</p>
+<p>Searching for “United States heat wave”</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getArticles</span>(<span class="st">"us heat wave"</span>, <span class="st">"2024-06-01"</span>, <span class="st">"b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getArticles</span>(<span class="st">"United States heat wave"</span>, <span class="st">"2024-06-01"</span>, <span class="st">"b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 98 × 8
+<pre><code># A tibble: 84 × 8
    title       author description source$id url   urlToImage publishedAt content
    &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
- 1 "How Much … Amand… "During ex… &lt;NA&gt;      http… https://w… 2024-06-22… "The h…
- 2 "Insider T… Joi-M… "In Saturd… business… http… https://i… 2024-06-22… "Getty…
- 3 "A Single … Kylie… "Not all 1… &lt;NA&gt;      http… &lt;NA&gt;       2024-06-22… "Summe…
- 4 "How to St… Shawn… "Heat impa… &lt;NA&gt;      http… https://c… 2024-06-21… "Is it…
- 5 "In Conver… info@… "It's prob… &lt;NA&gt;      http… https://i… 2024-06-21… "It’s …
- 6 "‘It’s Hel… Kate … "Illustrat… &lt;NA&gt;      http… https://i… 2024-06-21… "As a …
- 7 "5 Ways a … Jon R… "These big… &lt;NA&gt;      http… https://w… 2024-06-21… "A wee…
- 8 "The myste… Caitl… "The unpre… &lt;NA&gt;      http… https://s… 2024-06-21… "This …
- 9 "3 Fun Pla… Eater… "A new lun… &lt;NA&gt;      http… https://c… 2024-06-21… "The b…
-10 "Kathy Hoc… Liza … "“If you d… &lt;NA&gt;      http… https://i… 2024-06-21… "Hochu…
-# ℹ 88 more rows
+ 1 Helicopter… ED WH… "The gover… &lt;NA&gt;      http… https://b… 2024-06-22… "The g…
+ 2 Helicopter… ED WH… "The gover… &lt;NA&gt;      http… https://i… 2024-06-22… "The g…
+ 3 Eastern he… Alex … "Hot and c… &lt;NA&gt;      http… https://m… 2024-06-22… "June …
+ 4 Scorching … &lt;NA&gt;   "Millions … cbs-news  http… https://a… 2024-06-22… "A rel…
+ 5 FEMA is re… REBEC… "The head … &lt;NA&gt;      http… https://i… 2024-06-21… "WASHI…
+ 6 Climate ch… Assoc… "This mont… nbc-news  http… https://m… 2024-06-21… "Human…
+ 7 Trump clas… Eliza… "The judge… nbc-news  http… https://m… 2024-06-21… "The j…
+ 8 Little rel… Alexa… "There was… nbc-news  http… https://m… 2024-06-21… "There…
+ 9 The Art of… Frida… "( Tomdisp… &lt;NA&gt;      http… https://m… 2024-06-21… "( Tom…
+10 Heat wave … Rache… "Heat wave… &lt;NA&gt;      http… https://u… 2024-06-20… "Heat …
+# ℹ 74 more rows
 # ℹ 1 more variable: source$name &lt;chr&gt;</code></pre>
 </div>
 </div>

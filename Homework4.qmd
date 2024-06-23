@@ -204,7 +204,7 @@ Conducting a generic test using the `x_test` and `y_test` vectors shows that the
 
 ### 2.4. Test `getMAE`
 
-Next, we will use the code provided to again generate vectors ` resp` and `pred`. Seeing that this is the same code we used in Step 2, and that we did not alter either of the vectors in Step 2.2, we can safely pass these vectors through our`getMAE` function.
+Next, we will use the code provided to again generate vectors `resp` and `pred`. Seeing that this is the same code we used in Step 2, and that we did not alter either of the vectors in Step 2.2, we can safely pass these vectors through our`getMAE` function.
 
 ```{r test getMAE using response and predicted data}
 
@@ -244,11 +244,11 @@ getMAE_2(resp_NA, pred)
 
 ### 2.5. Generate wrapper function `getRMSE_MAE`
 
-Now that we have established that our `getRMSE` and `getMAE` functions work properly, we will use them as helper functions inside of a wrapper function `getRMSE_MAE` that can be used to return either the RMSE, the MAE, or both results. 
+Now that we have established that our `getRMSE` and `getMAE` functions work properly, we will use them as helper functions inside of a wrapper function `getRMSE_MAE` that can be used to return either the RMSE, the MAE, or both results.
 
-When returning the values, we will give them appropriate names to ensure we know which result applies to which statistic. We will generate the function returning both statistics as the default value. 
+When returning the values, we will give them appropriate names to ensure we know which result applies to which statistic. We will generate the function returning both statistics as the default value.
 
-Additionally, we will encase the function code inside of a `try()` function. This is necessary for our function to test if the input values are atomic, numeric, and vectors then output a user generated error message and exit the function if these conditions aren't met. Using `try()` allows the program to identify an issue with a single use of the function without preventing the remaining code chunks throughout the program from executing.  
+Additionally, we will encase the function code inside of a `try()` function. This is necessary for `getRMSE_MAE` to test if the input values are atomic, numeric, and vectors then output a user generated error message and exit the function if any of these conditions aren't met. Using `try()` allows the program to identify an issue with a single use of the function without preventing the remaining code chunks throughout the program from executing.
 
 First we will generate the function, then test it using our `x_test` and `y_test` generic data to ensure the function works without errors.
 
@@ -299,13 +299,15 @@ The function appears to be operational, so we are read to move on to the next st
 
 ### 2.6. Test the new wrapper function.
 
-We will again use the provided code to generate response (`resp`) and prediction (`pred`) variables for use in testing our wrapper function. 
+We will again use the provided code to generate response (`resp`) and prediction (`pred`) variables for use in testing our wrapper function.
 
 > set.seed(10)
-n <- 100
-x <- runif(n)
-resp <- 3 + 10*x + rnorm(n)
-pred <- predict(lm(resp ~ x), data.frame(x))
+>
+> n \<- 100 x \<- runif(n)
+>
+> resp \<- 3 + 10\*x + rnorm(n)
+>
+> pred \<- predict(lm(resp \~ x), data.frame(x))
 
 Because this is the same code we used earlier in this report, and we have not modified either of the vectors earlier throughout the report, we can safely process them through `getRMSE_MAE`.
 
@@ -319,7 +321,7 @@ getRMSE_MAE(resp, pred, "RMSE")
 
 ```
 
-Next we will output the `MAE` value by explicitly listing it in the function values. 
+Next we will output the `MAE` value by explicitly listing it in the function values.
 
 ```{r use getRMSE_MAE to output only MAE}
 
@@ -335,9 +337,9 @@ getRMSE_MAE(resp, pred)
 
 ```
 
-We will now repeat this process after replacing two of the response values with missing values using `NA_real_`.
+We will now repeat testing \`getRMSE_MAE\` after replacing two of the response values with missing values using `NA_real_`.
 
-This is the same process we used earlier in this report to generate our vector `resp_NA`. Because we have not modified `resp_NA` earlier throughout the report, we can safely process it through `getRMSE_MAE`.
+This is the same process we used earlier in this report to generate our vector `resp_NA`. Because we have not modified `resp_NA` earlier throughout this report, we can safely process it through `getRMSE_MAE`.
 
 Processing `resp_NA`'s values through `getRMSE_MAE` generates resulting outputs .
 
@@ -347,17 +349,17 @@ getRMSE_MAE(resp_NA, pred)
 
 ```
 
-Which is not how the homework is written for this step. Our function works properly while the homework is written in a way that suggests that "NA" responses for both RMSE and MAE should have generated. 
+Which is not how the homework is written for this step. Our function works properly while the homework is written in a way that suggests that "NA" responses for both RMSE and MAE should have generated.
 
 We did not receive the expected "NA" responses for both outputs because we used our improved functions `getRMSE_2` and `getMAE_2` when writing `getRMSE_MAE`. Both of these helper functions have code written in them to replace missing values with the mean of the other values in the vector. This resulted in the RMSE and MAE values being output instead of "NA".
 
-Finally, we will test the function by using an incorrect data type, a data frame instead of a vector, for one of our funciton inputs. To do this, we will first generate a data frame using the response and predicted variables, and name it `resp_df`. 
+Finally, we will test the function by using an incorrect data type, a data frame instead of a vector, for one of our funciton inputs. To do this, we will first generate a data frame using the response and predicted variables, and name it `resp_df`.
 
 ```{r generate data frame for conditional response testing}
 
 resp_list <- list("response" = resp, "predicted" = pred)
 
-resp_df <- as.tibble(resp_list)
+resp_df <- as_tibble(resp_list)
 
 str(resp_df)
 
@@ -370,24 +372,26 @@ Then we will attempt to process the data frame through `getRMSE_MAE`.
 getRMSE_MAE(resp_df, pred)
 
 ```
-We see that our screening criteria worked properly, generating an output message while displaying where the error in the function occurred. This error occurred due to the `if` statement testing `!is.atomic()` being `TRUE`, causing the `break` function to be executed. 
+
+We see that our screening criteria worked properly, generating an output message while displaying where the error in the function occurred. This error occurred due to the `if` statement testing `!is.atomic()` being `TRUE`, causing the associated `break` command to be executed.
 
 ## Task 3: Querying an API and a Tidy-Style Function
 
 ### 3.1. Using GET()
 
-Use `GET()` from the `httr` package to return information about a topic that has been in the news lately. To do this, we will use the default value of "/v2/everything" in our URL to ensure we return the maximum number of articles.
+Using `GET()` from the `httr` package, we will pull information from the "newsapi.org" website about a topic that has been in the news lately and store the information in variable \`site_raw_data\`.
 
 ```{r use GET() to return topic information}
 site_raw_data <- httr::GET("https://newsapi.org/v2/everything?q=Apple&from=2024-06-01&sortBy=popularity&apiKey=b5c4c79305fb46db9e6212948cdf50e0")
 
 site_raw_data
 ```
-The `GET()` function worked properly, so we are ready to move on to the next step. 
+
+The `GET()` function worked properly, so we are ready to move on to the next step.
 
 ### 3.2. Parse the returned information
 
-Next we are going to parse our variable `site_raw_data` into a data frame with the article information in it. When creating the data frame, we will ensure that the title, author, and description of the articles are first. We will also ensure the code omitsany articles that may have been removed by the host site and sorts the remaining results to ensure the most recent articles are listed first. 
+Next we are going to parse our created variable `site_raw_data` into a data frame with the article information in it. When creating the data frame, we will ensure that the title, author, and description of the articles are listed first. We will also ensure to omit articles from our search that may have been removed by the host site. Lastly, we will sort the results to ensure the most recent articles are listed first.
 
 ```{r parse the topic information into a tibble}
 parsed <- jsonlite::fromJSON(rawToChar(site_raw_data$content))
@@ -400,7 +404,7 @@ parsed <- jsonlite::fromJSON(rawToChar(site_raw_data$content))
 articles
 ```
 
-The parsing and data frame generation was a success. We are now ready to combine these separate operations into a function to query articles. 
+The parsing and data frame generation was a success. We are now ready to combine these separate operations into a function to query articles.
 
 ### 3.3. Write an API query function
 
@@ -431,7 +435,7 @@ getArticles("Apple", "2024-06-01", "b5c4c79305fb46db9e6212948cdf50e0")
 
 ```
 
-We see that our inital code works, so let's test it out two times using more complicated entries.
+We see that our initial code works, so let's test it out two times using more complicated title/subject entries.
 
 Searching for "Caitlin Clark"
 
@@ -440,12 +444,12 @@ getArticles("Caitlin Clark", "2024-06-10", "b5c4c79305fb46db9e6212948cdf50e0")
 
 ```
 
-Searching for "us heat wave"
+Searching for "United States heat wave"
 
 ```{r test funciton using subject values with multiple spaces in them}
 
-getArticles("us heat wave", "2024-06-01", "b5c4c79305fb46db9e6212948cdf50e0")
+getArticles("United States heat wave", "2024-06-01", "b5c4c79305fb46db9e6212948cdf50e0")
 
 ```
 
-Each of these iterations are a success. However, there is a flaw in the code design that could not be resolved. I was not able to find any code online that would assist with taking various ways of inputting the date and converting it into the `ymd()` format required for URL use. 
+Each of these iterations are a success. However, there is a flaw in the code design that could not be resolved. I was not able to find any code online that would assist with taking various ways of inputting the date and converting it into the `ymd()` format required for URL use.
