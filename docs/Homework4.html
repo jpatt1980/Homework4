@@ -187,49 +187,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="write-getrmse" class="level3">
 <h3 class="anchored" data-anchor-id="write-getrmse">2.1. Write <code>getRMSE</code></h3>
 <p>Step 1 of task 2 is to write a basic function called <code>getRMSE()</code> that takes in a vector of responses, a vector of predictions, and outputs the RMSE.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># name the function "getRMSE", define "x" as our response values and "y" as our predicted values. </span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>getRMSE <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># generate the loop required to subtract each predicted value from the corresponding response value.</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> x) {  </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># subtract the predicted values from the observed values, square the difference, sum the values, establish the mean of the sum, then take the square root of the mean. </span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The order of which variable is subtracted from which doesn't matter due to squaring the difference for each iteration of the loop. </span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  diff_sq <span class="ot">&lt;-</span> ((x <span class="sc">-</span> y)<span class="sc">**</span><span class="dv">2</span>)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  } </span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># take the square root of the mean of the diff_sq, this is the RMSE</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  RMSE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(diff_sq))</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># output the result</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  RMSE</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># quickly test the function using 10 through 100 by ten as the response and the mean as the predicted value for each response to ensure there are no error codes</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>x_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">70</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">100</span>)</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>)</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE</span>(x_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># name the function "getRMSE", define "x" as our response</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># values and "y" as our predicted values. </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>getRMSE <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># generate the loop required to subtract each predicted </span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># value from the corresponding response value.</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># subtract the predicted values from the observed values, square the difference, </span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># sum the values, establish the mean of the sum, then take</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># the square root of the mean. </span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: The order of which variable is subtracted from which</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># doesn't matter due to squaring the difference for each</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># iteration of the loop. </span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> x) {  </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  diff_sq <span class="ot">&lt;-</span> ((x <span class="sc">-</span> y)<span class="sc">**</span><span class="dv">2</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  } </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># take the square root of the mean of the diff_sq, define</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co"># it as "RMSE"</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  RMSE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(diff_sq))</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># output the result</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="st">"RMSE"</span> <span class="ot">=</span> RMSE)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co"># quickly test the function using 10 through 100 by ten as</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co"># the response and the mean as the predicted value for each</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co"># response to ensure there are no error codes</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>x_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">70</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">100</span>)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>, <span class="dv">55</span>)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE</span>(x_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 28.72281</code></pre>
+<pre><code>$RMSE
+[1] 28.72281</code></pre>
 </div>
 </div>
 <p>The generic run of our function did not produce an error code, so we’re ready to move on to step 2.</p>
@@ -239,11 +245,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Step 2 of task 2 is to generate response and predicted values for x, then process those values through our <code>getRMSE</code> function.</p>
 <p>First we will run the code provided in the homework assignment to create vectors of response values and predicted values. We will title these vectors <code>resp</code> and <code>pred</code> respectively.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span> <span class="dv">10</span><span class="sc">*</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="fu">lm</span>(resp <span class="sc">~</span> x), <span class="fu">data.frame</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span> <span class="dv">10</span><span class="sc">*</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="fu">lm</span>(resp <span class="sc">~</span> x), <span class="fu">data.frame</span>(x))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"response"</span> <span class="ot">=</span> resp, <span class="st">"predicted"</span> <span class="ot">=</span> pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$response
+  [1]  7.674144  5.733128  8.637031 12.068788  4.357179  6.040709  4.843093
+  [8]  6.255948  8.512399  7.587703  8.278962  8.221201  3.304767  9.299369
+ [15]  7.646876  8.504220  4.254724  5.160568  7.550652 10.115022 12.028134
+ [22]  7.723097  9.702653  6.337183  5.568563 11.239175  9.903050  4.965503
+ [29]  9.656077  8.081564  8.948798  3.708220  5.410925 12.714925  7.666618
+ [36] 10.636295 11.886290 14.767056  8.670500  7.931076  5.338484  5.097557
+ [43]  3.213884 11.444994  6.093762  3.192188  1.563749  8.753929  4.177170
+ [50] 12.242498  5.781476 12.783701  4.418721  8.442989  4.282396  9.395394
+ [57]  8.255719  6.016290  8.026494  9.180810  2.038727  5.273544  7.225220
+ [64]  6.654107 12.260485 10.688362  9.773488  8.216967  5.093565  6.142304
+ [71]  3.274337  8.547150  9.381826  7.061813  4.016495  7.543794  6.976389
+ [78] 11.550401  5.209433  3.872522 13.043037  8.277356  3.231859  8.553664
+ [85]  4.576422  2.213665 11.475262  6.469006  5.333390  5.656304  6.209727
+ [92]  8.908905  6.956097  9.642321  7.188749 12.413663  6.020730  8.507994
+ [99] 11.776177  3.387353
+
+$predicted
+        1         2         3         4         5         6         7         8 
+ 8.148104  6.053163  7.307135 10.085585  3.739836  5.204247  5.716673  5.693445 
+        9        10        11        12        13        14        15        16 
+ 9.279037  7.335984  9.652981  8.777073  4.035984  9.071286  6.588422  7.326985 
+       17        18        19        20        21        22        23        24 
+ 3.392964  5.608614  7.013660 11.578506 11.876889  9.274059 10.941555  6.562523 
+       25        26        27        28        29        30        31        32 
+ 7.087342 10.226961 11.600984  5.351967 10.896273  6.565957  8.441599  3.822838 
+       33        34        35        36        37        38        39        40 
+ 4.623563 12.243368  7.262566 10.655945 11.437790 12.815573 10.005657  8.075302 
+       41        42        43        44        45        46        47        48 
+ 5.726624  5.240438  3.001871 10.459905  5.459384  4.533592  3.029100  7.924969 
+       49        50        51        52        53        54        55        56 
+ 3.925253 11.217497  6.549574 12.625387  5.417487  7.789709  4.850664  8.938692 
+       57        58        59        60        61        62        63        64 
+ 7.647044  7.730136  7.024534  8.125218  3.184053  4.045989  7.745808  6.994831 
+       65        66        67        68        69        70        71        72 
+11.552256 10.795551  8.835719  7.522155  3.725912  5.138510  3.639992  8.429384 
+       73        74        75        76        77        78        79        80 
+ 9.545482  8.338708  3.261221  8.548719  6.741992 12.884971  5.537261  5.021745 
+       81        82        83        84        85        86        87        88 
+11.842039  7.698384  5.177431  9.359619  4.976822  3.056559 11.180401  5.714464 
+       89        90        91        92        93        94        95        96 
+ 4.590225  4.627202  7.950078 10.276667  9.029635  8.249127  6.834518 11.564354 
+       97        98        99       100 
+ 5.450278  8.493829 10.615164  3.164468 </code></pre>
+</div>
 </div>
 <p>Next we will test our function using the values we created for <code>resp</code> and <code>pred</code>.</p>
 <div class="cell">
@@ -256,209 +310,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># output the result</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  RMSE</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="st">"RMSE"</span> <span class="ot">=</span> RMSE)</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE</span>(resp, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9581677</code></pre>
+<pre><code>$RMSE
+[1] 0.9581677</code></pre>
 </div>
 </div>
 <p>Now that we have successfully tested our function, we are going to replace two response values with missing values using (NA_real_). We will call this new response vector <code>resp_NA</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>replace_values <span class="ot">&lt;-</span> <span class="fu">c</span>(resp[<span class="dv">1</span>], resp[<span class="dv">100</span>])</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>resp_NA <span class="ot">&lt;-</span> <span class="fu">replace</span>(resp, resp <span class="sc">%in%</span> replace_values, <span class="cn">NA_real_</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Next we will test our <code>getRMSE</code> function to determine how it responds with and without adding code to address the missing values in <code>resp_NA</code>.</p>
-<p>First we will test getRMSE without specifying behavior to deal with the missing values. We will save the results of this test as <code>RMSE_NA_without_specs</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>RMSE_NA_without_specs <span class="ot">&lt;-</span> <span class="fu">getRMSE</span>(resp_NA, pred)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>RMSE_NA_without_specs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>resp_NA <span class="ot">&lt;-</span> <span class="fu">replace</span>(resp, resp <span class="sc">%in%</span> replace_values, <span class="cn">NA_real_</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"response_NA"</span> <span class="ot">=</span> resp_NA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-</div>
-<p>Running the new vector through <code>getRMSE</code> produces the result of “NA”. This is due to the two NA values in the response variable not being suitable for computations, even while being numeric values themselves.</p>
-<p>To correct this, we will add code to <code>getRMSE</code> that will replace any NA values in an analyzed vector with the mean of the vector’s other values. We will call the updated function <code>getRMSE_2</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#update getRMSE to account for missing data in response variable, call the updated function getRMSE_2</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>getRMSE_2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">replace</span>(x, <span class="fu">is.na</span>(x), <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> x) {  </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    diff_sq <span class="ot">&lt;-</span> ((x <span class="sc">-</span> y)<span class="sc">**</span><span class="dv">2</span>)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  } </span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  RMSE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(diff_sq))</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># output the result</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  RMSE</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_2</span>(resp_NA, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.053783</code></pre>
-</div>
-</div>
-</section>
-<section id="write-getmae" class="level3">
-<h3 class="anchored" data-anchor-id="write-getmae">2.3. Write <code>getMAE</code></h3>
-<p>Similar to our <code>getRMSE</code> function, we will utilize a loop function to generate the iterative values of x[i] and y[i] in order to calculate the difference between them. Next we will take the absolute difference of these values, then determine their mean in order to determine the Mean Absolute Deviaton (MAE).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>getMAE <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> x) {</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    abs_diff <span class="ot">&lt;-</span> <span class="fu">abs</span>(x<span class="sc">-</span>y)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  MAE <span class="ot">&lt;-</span> <span class="fu">mean</span>(abs_diff)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  MAE</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">getMAE</span>(x_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 25</code></pre>
-</div>
-</div>
-<p>Conducting a generic test using the <code>x_test</code> and <code>y_test</code> vectors shows that the function did not produce an error. We are ready to further test our function.</p>
-</section>
-<section id="test-getmae" class="level3">
-<h3 class="anchored" data-anchor-id="test-getmae">2.4. Test <code>getMAE</code></h3>
-<p>Next, we will use the code provided go generate vectors <code>resp`` and</code>pred<code>. Seeing that this is the same code we used in Step 2, and that we did not alter these vectors in Step 2.2, we can safely pass these vectors through our</code>getMAE` function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getMAE</span>(resp, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.8155776</code></pre>
-</div>
-</div>
-<p>We will now attempt to reproduce our resutlts using a response data set that has missing values. This is the same test we previous did for <code>getRMSE</code>, so we will use the response vector <code>resp_NA</code> to further test <code>getMAE</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getMAE</span>(resp_NA, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-</div>
-<p>Like with our initial test of passing missing values through <code>getRMSE</code>, <code>get MAE</code> provides the result of “NA” due to the NA values.</p>
-<p>We will now modify the function code to account for NA values, then retest the function using <code>resp_NA</code></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>getMAE_2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">replace</span>(x, <span class="fu">is.na</span>(x), <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> x) {</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    abs_diff <span class="ot">&lt;-</span> <span class="fu">abs</span>(x<span class="sc">-</span>y)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  MAE <span class="ot">&lt;-</span> <span class="fu">mean</span>(abs_diff)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  MAE</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">getMAE_2</span>(resp_NA, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.8584455</code></pre>
-</div>
-</div>
-</section>
-<section id="generate-wrapper-function-getrmse_mae" class="level3">
-<h3 class="anchored" data-anchor-id="generate-wrapper-function-getrmse_mae">2.5. Generate wrapper function <code>getRMSE_MAE</code></h3>
-<p>Now that we have established that our <code>getRMSE</code> and <code>getMAE</code> functions work properly, we will use them as helper functions inside of a wrapper function <code>getRMSE_MAE</code> that can be used to return either <code>getRMSE</code>, <code>getMAE</code>, or both results. When returning the values, we will give them appropriate names to ensure we know which result applies to which statistic.</p>
-<p>First we will generate the function, then test it using generic data to ensure it works without errors.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>getRMSE_MAE <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">stat =</span> <span class="st">"both"</span>) {</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">try</span>({</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  error_code <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"The data is not atomic"</span>, <span class="st">"The data is not numeric"</span>, <span class="st">"The data is not a vector"</span>)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.atomic</span>(x) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.atomic</span>(y)) {</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(error_code[<span class="dv">1</span>])</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.numeric</span>(x) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.numeric</span>(y)) {</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(error_code[<span class="dv">2</span>])</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.vector</span>(x) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.vector</span>(y)) {</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(error_code[<span class="dv">3</span>])</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  RMSE <span class="ot">&lt;-</span> <span class="fu">getRMSE_2</span>(x,y)</span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  MAE <span class="ot">&lt;-</span> <span class="fu">getMAE_2</span>(x,y)</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(stat <span class="sc">==</span> <span class="st">"both"</span>) {</span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="st">"RMSE"</span> <span class="ot">=</span> RMSE, <span class="st">"MAE"</span> <span class="ot">=</span> MAE)</span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span>(stat <span class="sc">==</span> <span class="st">"RMSE"</span>) {</span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(<span class="st">"RMSE"</span> <span class="ot">=</span> RMSE)</span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span>(stat <span class="sc">==</span> <span class="st">"MAE"</span>) {</span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">list</span>(<span class="st">"MAE"</span> <span class="ot">=</span> MAE)</span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(x_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$RMSE
-[1] 28.72281
-
-$MAE
-[1] 25</code></pre>
-</div>
-</div>
-<p>The function appears to be operational, so we are read to move on to the next step.</p>
-</section>
-<section id="test-the-new-wrapper-function." class="level3">
-<h3 class="anchored" data-anchor-id="test-the-new-wrapper-function.">2.6. Test the new wrapper function.</h3>
-<p>Use the provided code to generate response and prediction variables for use.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span> <span class="dv">10</span><span class="sc">*</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="fu">lm</span>(resp <span class="sc">~</span> x), <span class="fu">data.frame</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Next, test the wrapper function using the data. Call it once for each metric individually, then once specifying both metrics.</p>
-<p>First we will call only the <code>RMSE</code> value by explicitly writing it in the function values.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp, pred, <span class="st">"RMSE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$RMSE
-[1] 0.9581677</code></pre>
-</div>
-</div>
-<p>Next we will call only the <code>MAE</code> value by explicitly writing it in the function values</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp, pred, <span class="st">"MAE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$MAE
-[1] 0.8155776</code></pre>
-</div>
-</div>
-<p>Now we will call both <code>RMSE</code> and <code>MAE</code>. Because we have set the default value for <code>statistic</code> as “both”, we will only input the response and predicted vectors.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$RMSE
-[1] 0.9581677
-
-$MAE
-[1] 0.8155776</code></pre>
-</div>
-</div>
-<p>We will now repeat this process after replacing two of the response values with missing values using <code>NA_real_</code>. Instead of re-creating a vector with missing values, we will re-use the vector <code>resp_NA</code>, with values listed here.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>resp_NA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  [1]        NA  5.733128  8.637031 12.068788  4.357179  6.040709  4.843093
+<pre><code>$response_NA
+  [1]        NA  5.733128  8.637031 12.068788  4.357179  6.040709  4.843093
   [8]  6.255948  8.512399  7.587703  8.278962  8.221201  3.304767  9.299369
  [15]  7.646876  8.504220  4.254724  5.160568  7.550652 10.115022 12.028134
  [22]  7.723097  9.702653  6.337183  5.568563 11.239175  9.903050  4.965503
@@ -475,9 +345,273 @@ $MAE
  [99] 11.776177        NA</code></pre>
 </div>
 </div>
-<p>Next we will process <code>resp_NA</code> through <code>getRMSE_MAE</code> to determine if the function will process the data.</p>
+<p>Next we will test our <code>getRMSE</code> function to determine how it responds with and without adding code to address the missing values in <code>resp_NA</code>.</p>
+<p>First we will test getRMSE without specifying behavior to deal with the missing values. We will save the results of this test as <code>RMSE_NA_no_specs</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp_NA, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>RMSE_NA_no_specs <span class="ot">&lt;-</span> <span class="fu">getRMSE</span>(resp_NA, pred)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"RMSE_without_NA_specs"</span> <span class="ot">=</span> RMSE_NA_no_specs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$RMSE_without_NA_specs
+$RMSE_without_NA_specs$RMSE
+[1] NA</code></pre>
+</div>
+</div>
+<p>Running <code>resp_NA`` through</code>getRMSE` produces the result of “NA”. This is due to the two NA values in the response variable not being suitable for computations, even while being numeric values themselves.</p>
+<p>To correct this, we will add code to <code>getRMSE</code> that will replace any NA values in an analyzed vector with the mean of the vector’s other values. We will call the updated function <code>getRMSE_2</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># update getRMSE to account for missing data in response variable, </span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># call the updated function getRMSE_2</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>getRMSE_2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">replace</span>(x, <span class="fu">is.na</span>(x), <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> x) {  </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    diff_sq <span class="ot">&lt;-</span> ((x <span class="sc">-</span> y)<span class="sc">**</span><span class="dv">2</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  } </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  RMSE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(diff_sq))</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># output the result</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="st">"RMSE"</span> <span class="ot">=</span> RMSE)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_2</span>(resp_NA, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$RMSE
+[1] 1.053783</code></pre>
+</div>
+</div>
+</section>
+<section id="write-getmae" class="level3">
+<h3 class="anchored" data-anchor-id="write-getmae">2.3. Write <code>getMAE</code></h3>
+<p>Similar to our <code>getRMSE</code> function, we will utilize a loop function to generate the iterative values of <code>x[i]</code> and <code>y[i]</code> in order to calculate the difference between them. Next we will take the absolute difference of these values, then determine their mean in order to determine the Mean Absolute Deviation (MAE).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>getMAE <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> x) {</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    abs_diff <span class="ot">&lt;-</span> <span class="fu">abs</span>(x<span class="sc">-</span>y)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  MAE <span class="ot">&lt;-</span> <span class="fu">mean</span>(abs_diff)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="st">"MAE"</span> <span class="ot">=</span> MAE)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">getMAE</span>(x_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$MAE
+[1] 25</code></pre>
+</div>
+</div>
+<p>Conducting a generic test using the <code>x_test</code> and <code>y_test</code> vectors shows that the function did not produce an error. We are ready to further test our function.</p>
+</section>
+<section id="test-getmae" class="level3">
+<h3 class="anchored" data-anchor-id="test-getmae">2.4. Test <code>getMAE</code></h3>
+<p>Next, we will use the code provided to again generate vectors <code>resp</code> and <code>pred</code>. Seeing that this is the same code we used in Step 2, and that we did not alter these vectors in Step 2.2, we can safely pass these vectors through our<code>getMAE</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getMAE</span>(resp, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$MAE
+[1] 0.8155776</code></pre>
+</div>
+</div>
+<p>We will now attempt to reproduce our <code>MAE</code> results using a response data set that has missing values. This is the same test we previous did for <code>getRMSE</code>, so we will use the response vector <code>resp_NA</code> to further test <code>getMAE</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getMAE</span>(resp_NA, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$MAE
+[1] NA</code></pre>
+</div>
+</div>
+<p>Like with our initial test of passing missing values through <code>getRMSE</code>, <code>get MAE</code> provides the result of “NA” due to the NA values.</p>
+<p>We will now modify the function code to account for NA values, then retest the function using <code>resp_NA</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>getMAE_2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">replace</span>(x, <span class="fu">is.na</span>(x), <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> x) {</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    abs_diff <span class="ot">&lt;-</span> <span class="fu">abs</span>(x<span class="sc">-</span>y)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  MAE <span class="ot">&lt;-</span> <span class="fu">mean</span>(abs_diff)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="st">"MAE"</span> <span class="ot">=</span> MAE)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="fu">getMAE_2</span>(resp_NA, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$MAE
+[1] 0.8584455</code></pre>
+</div>
+</div>
+</section>
+<section id="generate-wrapper-function-getrmse_mae" class="level3">
+<h3 class="anchored" data-anchor-id="generate-wrapper-function-getrmse_mae">2.5. Generate wrapper function <code>getRMSE_MAE</code></h3>
+<p>Now that we have established that our <code>getRMSE</code> and <code>getMAE</code> functions work properly, we will use them as helper functions inside of a wrapper function <code>getRMSE_MAE</code> that can be used to return either <code>getRMSE</code>, <code>getMAE</code>, or both results.</p>
+<p>When returning the values, we will give them appropriate names to ensure we know which result applies to which statistic. We will generate the function returning both statistics as the default value.</p>
+<p>Additionally, we will encase the function code inside of a <code>try()</code> function. This is necessary for our function to test if the input values are atomic, numeric, and vectors then output a user generated error message and exit the function if these conditions aren’t met. Using <code>try()</code> allows the program to identify an issue with a single use of the function without preventing the remaining code chunks throughout the program from executing.</p>
+<p>First we will generate the function, then test it using our <code>x_test</code> and <code>y_test</code> generic data to ensure the function works without errors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>getRMSE_MAE <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y, <span class="at">stat =</span> <span class="st">"both"</span>) {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">try</span>({</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  error_code <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"The data is not atomic"</span>, <span class="st">"The data is not numeric"</span>, </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"The data is not a vector"</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.atomic</span>(x) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.atomic</span>(y)) {</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(error_code[<span class="dv">1</span>])</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.numeric</span>(x) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.numeric</span>(y)) {</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(error_code[<span class="dv">2</span>])</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.vector</span>(x) <span class="sc">|</span> <span class="sc">!</span><span class="fu">is.vector</span>(y)) {</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(error_code[<span class="dv">3</span>])</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  RMSE <span class="ot">&lt;-</span> <span class="fu">getRMSE_2</span>(x,y)</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  MAE <span class="ot">&lt;-</span> <span class="fu">getMAE_2</span>(x,y)</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(stat <span class="sc">==</span> <span class="st">"both"</span>) {</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(RMSE)</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(MAE)</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span>(stat <span class="sc">==</span> <span class="st">"RMSE"</span>) {</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>      RMSE</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span>(stat <span class="sc">==</span> <span class="st">"MAE"</span>) {</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>      MAE</span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Incorrect Statistic Selection"</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(x_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$RMSE
+[1] 28.72281
+
+$MAE
+[1] 25</code></pre>
+</div>
+</div>
+<p>The function appears to be operational, so we are read to move on to the next step.</p>
+</section>
+<section id="test-the-new-wrapper-function." class="level3">
+<h3 class="anchored" data-anchor-id="test-the-new-wrapper-function.">2.6. Test the new wrapper function.</h3>
+<p>We will again use the provided code to generate response and prediction variables for use in testing our wrapper funciton.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span> <span class="dv">10</span><span class="sc">*</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="fu">lm</span>(resp <span class="sc">~</span> x), <span class="fu">data.frame</span>(x))</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"response"</span> <span class="ot">=</span> resp, <span class="st">"predicted"</span> <span class="ot">=</span> pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$response
+  [1]  7.674144  5.733128  8.637031 12.068788  4.357179  6.040709  4.843093
+  [8]  6.255948  8.512399  7.587703  8.278962  8.221201  3.304767  9.299369
+ [15]  7.646876  8.504220  4.254724  5.160568  7.550652 10.115022 12.028134
+ [22]  7.723097  9.702653  6.337183  5.568563 11.239175  9.903050  4.965503
+ [29]  9.656077  8.081564  8.948798  3.708220  5.410925 12.714925  7.666618
+ [36] 10.636295 11.886290 14.767056  8.670500  7.931076  5.338484  5.097557
+ [43]  3.213884 11.444994  6.093762  3.192188  1.563749  8.753929  4.177170
+ [50] 12.242498  5.781476 12.783701  4.418721  8.442989  4.282396  9.395394
+ [57]  8.255719  6.016290  8.026494  9.180810  2.038727  5.273544  7.225220
+ [64]  6.654107 12.260485 10.688362  9.773488  8.216967  5.093565  6.142304
+ [71]  3.274337  8.547150  9.381826  7.061813  4.016495  7.543794  6.976389
+ [78] 11.550401  5.209433  3.872522 13.043037  8.277356  3.231859  8.553664
+ [85]  4.576422  2.213665 11.475262  6.469006  5.333390  5.656304  6.209727
+ [92]  8.908905  6.956097  9.642321  7.188749 12.413663  6.020730  8.507994
+ [99] 11.776177  3.387353
+
+$predicted
+        1         2         3         4         5         6         7         8 
+ 8.148104  6.053163  7.307135 10.085585  3.739836  5.204247  5.716673  5.693445 
+        9        10        11        12        13        14        15        16 
+ 9.279037  7.335984  9.652981  8.777073  4.035984  9.071286  6.588422  7.326985 
+       17        18        19        20        21        22        23        24 
+ 3.392964  5.608614  7.013660 11.578506 11.876889  9.274059 10.941555  6.562523 
+       25        26        27        28        29        30        31        32 
+ 7.087342 10.226961 11.600984  5.351967 10.896273  6.565957  8.441599  3.822838 
+       33        34        35        36        37        38        39        40 
+ 4.623563 12.243368  7.262566 10.655945 11.437790 12.815573 10.005657  8.075302 
+       41        42        43        44        45        46        47        48 
+ 5.726624  5.240438  3.001871 10.459905  5.459384  4.533592  3.029100  7.924969 
+       49        50        51        52        53        54        55        56 
+ 3.925253 11.217497  6.549574 12.625387  5.417487  7.789709  4.850664  8.938692 
+       57        58        59        60        61        62        63        64 
+ 7.647044  7.730136  7.024534  8.125218  3.184053  4.045989  7.745808  6.994831 
+       65        66        67        68        69        70        71        72 
+11.552256 10.795551  8.835719  7.522155  3.725912  5.138510  3.639992  8.429384 
+       73        74        75        76        77        78        79        80 
+ 9.545482  8.338708  3.261221  8.548719  6.741992 12.884971  5.537261  5.021745 
+       81        82        83        84        85        86        87        88 
+11.842039  7.698384  5.177431  9.359619  4.976822  3.056559 11.180401  5.714464 
+       89        90        91        92        93        94        95        96 
+ 4.590225  4.627202  7.950078 10.276667  9.029635  8.249127  6.834518 11.564354 
+       97        98        99       100 
+ 5.450278  8.493829 10.615164  3.164468 </code></pre>
+</div>
+</div>
+<p>Next, we will test the wrapper function using the data we just generated. We will use <code>getRMSE_MAE</code> once to output each statistic individually, then once to output both statistics together.</p>
+<p>First we will output the <code>RMSE</code> value by explicitly listing it in the function values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp, pred, <span class="st">"RMSE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$RMSE
+[1] 0.9581677</code></pre>
+</div>
+</div>
+<p>Next we will output the <code>MAE</code> value by explicitly listing it in the function values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp, pred, <span class="st">"MAE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$MAE
+[1] 0.8155776</code></pre>
+</div>
+</div>
+<p>Now we will output both <code>RMSE</code> and <code>MAE</code> together. Because we have set the default value for <code>statistic</code> as “both”, we will only input the response and predicted vectors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$RMSE
+[1] 0.9581677
+
+$MAE
+[1] 0.8155776</code></pre>
+</div>
+</div>
+<p>We will now repeat this process after replacing two of the response values with missing values using <code>NA_real_</code>. Instead of re-creating a vector with missing values, we will re-use the vector <code>resp_NA</code>. Recall, <code>resp_NA</code>’s values are:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"response_NA"</span> <span class="ot">=</span> resp_NA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$response_NA
+  [1]        NA  5.733128  8.637031 12.068788  4.357179  6.040709  4.843093
+  [8]  6.255948  8.512399  7.587703  8.278962  8.221201  3.304767  9.299369
+ [15]  7.646876  8.504220  4.254724  5.160568  7.550652 10.115022 12.028134
+ [22]  7.723097  9.702653  6.337183  5.568563 11.239175  9.903050  4.965503
+ [29]  9.656077  8.081564  8.948798  3.708220  5.410925 12.714925  7.666618
+ [36] 10.636295 11.886290 14.767056  8.670500  7.931076  5.338484  5.097557
+ [43]  3.213884 11.444994  6.093762  3.192188  1.563749  8.753929  4.177170
+ [50] 12.242498  5.781476 12.783701  4.418721  8.442989  4.282396  9.395394
+ [57]  8.255719  6.016290  8.026494  9.180810  2.038727  5.273544  7.225220
+ [64]  6.654107 12.260485 10.688362  9.773488  8.216967  5.093565  6.142304
+ [71]  3.274337  8.547150  9.381826  7.061813  4.016495  7.543794  6.976389
+ [78] 11.550401  5.209433  3.872522 13.043037  8.277356  3.231859  8.553664
+ [85]  4.576422  2.213665 11.475262  6.469006  5.333390  5.656304  6.209727
+ [92]  8.908905  6.956097  9.642321  7.188749 12.413663  6.020730  8.507994
+ [99] 11.776177        NA</code></pre>
+</div>
+</div>
+<p>Processing <code>resp_NA</code>’s values through <code>getRMSE_MAE</code> generates resulting outputs: .</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp_NA, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$RMSE
 [1] 1.053783
@@ -486,89 +620,109 @@ $MAE
 [1] 0.8584455</code></pre>
 </div>
 </div>
-<p>We see that our function works properly, which is not how the homework is written for this step.</p>
-<p>Because we used the functions <code>getRMSE_2</code> and <code>getMAE_2</code> (both of which have code written in them to account for missing values) when writing <code>getRMSE_MAE</code>, we did not receive the expected “NA” responses for both the RMSE and MAE outputs.</p>
-<p>Finally, we will test the function by using incorrect data type (i.e.&nbsp;a data frame instead of a vector).</p>
-<p>First we will generate a data frame using the response and predicted variables, and name it <code>resp_df</code></p>
+<p>Which is not how the homework is written for this step. Our function works properly while the homework is written in a way that suggests that “NA” responses for both <code>RMSE</code> and <code>MAE</code> should have generated.</p>
+<p>We did not receive the expected “NA” responses for both outputs because we used our improved functions <code>getRMSE_2</code> and <code>getMAE_2</code> when writing <code>getRMSE_MAE</code>. Both of these helper functions have code written in them to account for missing values, resulting in the RMSE and MAE values being output instead of “NA”.</p>
+<p>Finally, we will test the function by using incorrect data type (i.e.&nbsp;a data frame instead of a vector). To do this, we will first generate a data frame using the response and predicted variables, and name it <code>resp_df</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>resp_df <span class="ot">&lt;-</span> <span class="fu">list</span>(resp, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>resp_df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"response"</span> <span class="ot">=</span> resp, <span class="st">"predicted"</span> <span class="ot">=</span> pred)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(resp_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 2
+ $ response : num [1:100] 7.67 5.73 8.64 12.07 4.36 ...
+ $ predicted: Named num [1:100] 8.15 6.05 7.31 10.09 3.74 ...
+  ..- attr(*, "names")= chr [1:100] "1" "2" "3" "4" ...</code></pre>
+</div>
 </div>
 <p>Then we will attempt to process the data frame through <code>getRMSE_MAE</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp_df, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getRMSE_MAE</span>(resp_df, pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "The data is not atomic"
 Error in try({ : no loop for break/next, jumping to top level</code></pre>
 </div>
 </div>
+<p>We see that our screening criteria worked properly, generating an output message while displaying where the error in the function occurred. This error occurred due to the <code>if</code> statement testing <code>!is.atomic()</code> being <code>TRUE</code>, causing the <code>break</code> function to be executed.</p>
 </section>
 </section>
 <section id="task-3-querying-an-api-and-a-tidy-style-function" class="level2">
 <h2 class="anchored" data-anchor-id="task-3-querying-an-api-and-a-tidy-style-function">Task 3: Querying an API and a Tidy-Style Function</h2>
-<p>API Key for read-in is:</p>
-<p>b5c4c79305fb46db9e6212948cdf50e0</p>
 <section id="using-get" class="level3">
 <h3 class="anchored" data-anchor-id="using-get">3.1. Using GET()</h3>
 <p>Use <code>GET()</code> from the <code>httr</code> package to return information about a topic that has been in the news lately. To do this, we will use the default value of “/v2/everything” in our URL to ensure we return the maximum number of articles.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>site_raw_data <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">GET</span>(<span class="st">"https://newsapi.org/v2/everything?q=Caitlin%20Clark&amp;from=2024-06-01&amp;sortBy=popularity&amp;apiKey=b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>site_raw_data <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">GET</span>(<span class="st">"https://newsapi.org/v2/everything?q=Apple&amp;from=2024-06-01&amp;sortBy=popularity&amp;apiKey=b5c4c79305fb46db9e6212948cdf50e0"</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>site_raw_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response [https://newsapi.org/v2/everything?q=Apple&amp;from=2024-06-01&amp;sortBy=popularity&amp;apiKey=b5c4c79305fb46db9e6212948cdf50e0]
+  Date: 2024-06-23 17:51
+  Status: 200
+  Content-Type: application/json; charset=utf-8
+  Size: 67.7 kB</code></pre>
 </div>
+</div>
+<p>The <code>GET()</code> function worked properly, so we are ready to move on to the next step.</p>
 </section>
 <section id="parse-the-returned-information" class="level3">
 <h3 class="anchored" data-anchor-id="parse-the-returned-information">3.2. Parse the returned information</h3>
-<p>Parse the returned information into a data frame with the article information in it.</p>
+<p>Next we are going to parse our variable <code>site_raw_data</code> into a data frame with the article information in it. When creating the data frame, we will ensure that the title, author, and description of the articles are first. We will also ensure the code omitsany articles that may have been removed by the host site and sorts the remaining results to ensure the most recent articles are listed first.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>parsed <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(site_raw_data<span class="sc">$</span>content))</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>articles <span class="ot">&lt;-</span> <span class="fu">as.tibble</span>(parsed<span class="sc">$</span>articles) <span class="sc">|&gt;</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(title <span class="sc">!=</span> <span class="st">"[Removed]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>parsed <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(site_raw_data<span class="sc">$</span>content))</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  articles <span class="ot">&lt;-</span> <span class="fu">as.tibble</span>(parsed<span class="sc">$</span>articles) <span class="sc">|&gt;</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(title, author, description, <span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(title <span class="sc">!=</span> <span class="st">"[Removed]"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(publishedAt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: `as.tibble()` was deprecated in tibble 2.0.0.
 ℹ Please use `as_tibble()` instead.
 ℹ The signature and semantics have changed, see `?as_tibble`.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>articles</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>articles</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 100 × 8
-   source$id $name author title description url   urlToImage publishedAt content
-   &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
- 1 &lt;NA&gt;      NPR   Becky… Cait… "Caitlin C… http… https://m… 2024-06-09… "Caitl…
- 2 &lt;NA&gt;      NPR   Brian… WNBA… "The India… http… https://n… 2024-06-09… "One o…
- 3 &lt;NA&gt;      NPR   Becky… The … "With reco… http… https://n… 2024-06-11… "More …
- 4 &lt;NA&gt;      NPR   Danie… Satu… "NPR's Dan… http… https://m… 2024-06-15… "NPR's…
- 5 &lt;NA&gt;      NPR   Emma … WNBA… "The \"Dou… http… https://n… 2024-06-21… "Chica…
- 6 business… Busi… Joi-M… Insi… "In Saturd… http… https://i… 2024-06-22… "Getty…
- 7 business… Busi… Ashle… Athl… "Athlete m… http… https://i… 2024-06-17… "Pete …
- 8 business… Busi… Dan D… 'Qui… "'Quiet va… http… https://i… 2024-06-20… "Tyler…
- 9 usa-today USA … Dana … Cait… "Eli wants… http… https://s… 2024-06-13… "Eli w…
-10 time      Time  Sean … Let … "Caitlin C… http… https://a… 2024-06-10… "Caitl…
-# ℹ 90 more rows</code></pre>
+<pre><code># A tibble: 76 × 8
+   title       author description source$id url   urlToImage publishedAt content
+   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
+ 1 Typing to … Victo… "In iOS 18… the-verge http… https://c… 2024-06-22… "Typin…
+ 2 Bugatti’s … Jason… "Furiously… wired     http… https://m… 2024-06-20… "The r…
+ 3 EU delays … Kris … "European … &lt;NA&gt;      http… &lt;NA&gt;       2024-06-20… "If yo…
+ 4 Ex-OpenAI … Benj … "Safe Supe… ars-tech… http… https://c… 2024-06-20… "Enlar…
+ 5 Xbox Game … Quent… "CDKeys is… the-verge http… https://c… 2024-06-19… "Xbox …
+ 6 The Mornin… Mat S… "Nintendo … &lt;NA&gt;      http… &lt;NA&gt;       2024-06-19… "If yo…
+ 7 This unive… Quent… "Cantata h… the-verge http… https://c… 2024-06-18… "This …
+ 8 Nvidia ove… Richa… "Nvidia’s … the-verge http… https://c… 2024-06-18… "Nvidi…
+ 9 Beats Solo… Billy… "The idea … &lt;NA&gt;      http… &lt;NA&gt;       2024-06-18… "If yo…
+10 Your Apple… Dua R… "WWDC 2024… &lt;NA&gt;      http… https://i… 2024-06-18… "WWDC …
+# ℹ 66 more rows
+# ℹ 1 more variable: source$name &lt;chr&gt;</code></pre>
 </div>
 </div>
+<p>The parsing and data frame generation was a success. We are now ready to combine these separate operations into a function to query articles.</p>
 </section>
 <section id="write-an-api-query-function" class="level3">
 <h3 class="anchored" data-anchor-id="write-an-api-query-function">3.3. Write an API query function</h3>
 <p>Now that we have successfully retrieved and parsed the data into a tibble separately, we will write a quick function that allows the user to easily query the API using inputs for the title/subject, a time period for the search, and an API key.</p>
 <p>When developing our function, we tested it using the inputs “Apple”, “2024-06-01”, and the API that “newsapi.org” provided.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>getArticles <span class="ot">&lt;-</span> <span class="cf">function</span>(subject, date_start, APIkey) {</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  subject <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(subject,<span class="st">" "</span>, <span class="st">"%20"</span>)</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  sitestring <span class="ot">&lt;-</span>  httr<span class="sc">::</span><span class="fu">GET</span>(<span class="fu">str_c</span>(<span class="st">"https://newsapi.org/v2/everything?q="</span>, subject, <span class="st">"&amp;from="</span>, date_start, <span class="st">"&amp;sortBy=popularity&amp;apiKey="</span>, APIkey)) </span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  parsed <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(sitestring<span class="sc">$</span>content))</span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  articles <span class="ot">&lt;-</span> <span class="fu">as.tibble</span>(parsed<span class="sc">$</span>articles) <span class="sc">|&gt;</span></span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(title, author, description, <span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(title <span class="sc">!=</span> <span class="st">"[Removed]"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(publishedAt))</span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>  articles</span>
-<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a><span class="fu">getArticles</span>(<span class="st">"Apple"</span>, <span class="st">"2024-06-01"</span>, <span class="st">"b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>getArticles <span class="ot">&lt;-</span> <span class="cf">function</span>(subject, date_start, APIkey) {</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  subject <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(subject,<span class="st">" "</span>, <span class="st">"%20"</span>)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  sitestring <span class="ot">&lt;-</span>  httr<span class="sc">::</span><span class="fu">GET</span>(<span class="fu">str_c</span>(<span class="st">"https://newsapi.org/v2/everything?q="</span>, subject, <span class="st">"&amp;from="</span>, date_start, <span class="st">"&amp;sortBy=popularity&amp;apiKey="</span>, APIkey)) </span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  parsed <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(sitestring<span class="sc">$</span>content))</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  articles <span class="ot">&lt;-</span> <span class="fu">as.tibble</span>(parsed<span class="sc">$</span>articles) <span class="sc">|&gt;</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(title, author, description, <span class="fu">everything</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(title <span class="sc">!=</span> <span class="st">"[Removed]"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(publishedAt))</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>  articles</span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="fu">getArticles</span>(<span class="st">"Apple"</span>, <span class="st">"2024-06-01"</span>, <span class="st">"b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 76 × 8
    title       author description source$id url   urlToImage publishedAt content
@@ -590,46 +744,47 @@ Error in try({ : no loop for break/next, jumping to top level</code></pre>
 <p>We see that our inital code works, so let’s test it out two times using more complicated entries.</p>
 <p>Searching for “Caitlin Clark”</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getArticles</span>(<span class="st">"Caitlin Clark"</span>, <span class="st">"2024-06-10"</span>, <span class="st">"b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getArticles</span>(<span class="st">"Caitlin Clark"</span>, <span class="st">"2024-06-10"</span>, <span class="st">"b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 96 × 8
+<pre><code># A tibble: 97 × 8
    title       author description source$id url   urlToImage publishedAt content
    &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
- 1 Fever's Ca… "Jose… "Indiana F… bleacher… http… https://m… 2024-06-22… "Jeff …
- 2 Insider To… "Joi-… "In Saturd… business… http… https://i… 2024-06-22… "Getty…
- 3 Aces Top W… "Jay … "Record vi… &lt;NA&gt;      http… https://i… 2024-06-22… "In th…
- 4 Caitlin Cl… "Andr… "The India… bleacher… http… https://m… 2024-06-22… "Adam …
- 5 WNBA rooki… "Emma… "The \"Dou… &lt;NA&gt;      http… https://n… 2024-06-21… "Chica…
- 6 Caitlin Cl… "Paul… "Indiana F… bleacher… http… https://m… 2024-06-21… "Emile…
- 7 The Need F… "Bria… "Financial… &lt;NA&gt;      http… https://i… 2024-06-21… "In Ju…
- 8 A'ja Wilso… "DOUG… "A’ja Wils… abc-news  http… https://i… 2024-06-21… "NEW Y…
- 9 Wilson, Cl… "Mich… "The Aces'… espn      http… https://a… 2024-06-21… "The L…
-10 A'ja Wilso… "Mike… "A'ja Wils… bleacher… http… https://m… 2024-06-21… "Ethan…
-# ℹ 86 more rows
+ 1 Caitlin Cl…  &lt;NA&gt;  "Caitlin C… fox-spor… http… https://a… 2024-06-22… "The I…
+ 2 Fever's Ca… "Jose… "Indiana F… bleacher… http… https://m… 2024-06-22… "Jeff …
+ 3 Insider To… "Joi-… "In Saturd… business… http… https://i… 2024-06-22… "Getty…
+ 4 Aces Top W… "Jay … "Record vi… &lt;NA&gt;      http… https://i… 2024-06-22… "In th…
+ 5 Caitlin Cl… "Andr… "The India… bleacher… http… https://m… 2024-06-22… "Adam …
+ 6 WNBA rooki… "Emma… "The \"Dou… &lt;NA&gt;      http… https://n… 2024-06-21… "Chica…
+ 7 Caitlin Cl… "Paul… "Indiana F… bleacher… http… https://m… 2024-06-21… "Emile…
+ 8 The Need F… "Bria… "Financial… &lt;NA&gt;      http… https://i… 2024-06-21… "In Ju…
+ 9 A'ja Wilso… "DOUG… "A’ja Wils… abc-news  http… https://i… 2024-06-21… "NEW Y…
+10 Wilson, Cl… "Mich… "The Aces'… espn      http… https://a… 2024-06-21… "The L…
+# ℹ 87 more rows
 # ℹ 1 more variable: source$name &lt;chr&gt;</code></pre>
 </div>
 </div>
-<p>Searching for “West Virginial DMV”</p>
+<p>Searching for “us heat wave”</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getArticles</span>(<span class="st">"heat wave"</span>, <span class="st">"2024-06-01"</span>, <span class="st">"b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getArticles</span>(<span class="st">"us heat wave"</span>, <span class="st">"2024-06-01"</span>, <span class="st">"b5c4c79305fb46db9e6212948cdf50e0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 100 × 8
+<pre><code># A tibble: 98 × 8
    title       author description source$id url   urlToImage publishedAt content
    &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
- 1 Insider To… Joi-M… "In Saturd… business… http… https://i… 2024-06-22… "Getty…
- 2 Florida re… Jenny… "Scientist… &lt;NA&gt;      http… https://n… 2024-06-22… "MIAMI…
- 3 Why Extrem… Chant… "The “heat… time      http… https://a… 2024-06-21… "The h…
- 4 U.S. Citie… Simmo… "The Natio… time      http… https://a… 2024-06-21… "High …
- 5 In Convers… info@… "It's prob… &lt;NA&gt;      http… https://i… 2024-06-21… "It’s …
- 6 5 Ways a P… Jon R… "These big… &lt;NA&gt;      http… https://w… 2024-06-21… "A wee…
- 7 The myster… Caitl… "The unpre… &lt;NA&gt;      http… https://s… 2024-06-21… "This …
- 8 Heat Dome … Chels… "With a he… &lt;NA&gt;      http… https://s… 2024-06-21… "CLIMA…
- 9 Extreme te… Miche… "NPR's Mic… &lt;NA&gt;      http… https://m… 2024-06-21… "NPR's…
-10 New rules … Aleja… "Californi… &lt;NA&gt;      http… https://n… 2024-06-21… "Calif…
-# ℹ 90 more rows
+ 1 "How Much … Amand… "During ex… &lt;NA&gt;      http… https://w… 2024-06-22… "The h…
+ 2 "Insider T… Joi-M… "In Saturd… business… http… https://i… 2024-06-22… "Getty…
+ 3 "A Single … Kylie… "Not all 1… &lt;NA&gt;      http… &lt;NA&gt;       2024-06-22… "Summe…
+ 4 "How to St… Shawn… "Heat impa… &lt;NA&gt;      http… https://c… 2024-06-21… "Is it…
+ 5 "In Conver… info@… "It's prob… &lt;NA&gt;      http… https://i… 2024-06-21… "It’s …
+ 6 "‘It’s Hel… Kate … "Illustrat… &lt;NA&gt;      http… https://i… 2024-06-21… "As a …
+ 7 "5 Ways a … Jon R… "These big… &lt;NA&gt;      http… https://w… 2024-06-21… "A wee…
+ 8 "The myste… Caitl… "The unpre… &lt;NA&gt;      http… https://s… 2024-06-21… "This …
+ 9 "3 Fun Pla… Eater… "A new lun… &lt;NA&gt;      http… https://c… 2024-06-21… "The b…
+10 "Kathy Hoc… Liza … "“If you d… &lt;NA&gt;      http… https://i… 2024-06-21… "Hochu…
+# ℹ 88 more rows
 # ℹ 1 more variable: source$name &lt;chr&gt;</code></pre>
 </div>
 </div>
+<p>Each of these iterations are a success. However, there is a flaw in the code design that could not be resolved. I was not able to find any code online that would assist with taking various ways of inputting the date and converting it into the <code>ymd()</code> format required for URL use.</p>
 
 
 </section>
