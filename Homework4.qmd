@@ -5,7 +5,7 @@ format: html
 editor: visual
 ---
 
-# Homework 4 Assignment Objectives
+## Homework 4 Assignment Objectives
 
 Task 1 for this homework assignment is practice with answering the types of questions that will be asked on the next exam.
 
@@ -13,7 +13,7 @@ Task 2 of the assignment involves writing R functions manually create functions 
 
 Task 3 of the assignment focuses on querying an API and writing a function that queries the API and
 
-## Task 1: Conceptual Questions
+### Task 1: Conceptual Questions
 
 1.  What is the purpose of the `lapply()` function? What is the equivalent `purrr` function?
 
@@ -35,7 +35,7 @@ Task 3 of the assignment focuses on querying an API and writing a function that 
 
     > The sd() function is global throughout R (via R packages). When use inside of a function, `sd` is a temporary variable that is local to the funciton it is in. Once the functioncode is finished running, the variable sd does not exist.
 
-## Task 2: Writing R Functions
+### Task 2: Writing R Functions
 
 Before we write any code, we want to ensure we establish a library for the functions to operate from so the program renders to Quarto properly.
 
@@ -45,7 +45,7 @@ library(tidyverse)
 
 ```
 
-### 2.1. Write `getRMSE`
+#### 2.1. Write `getRMSE`
 
 Step 1 of task 2 is to write a basic function called `getRMSE()` that takes in a vector of responses, a vector of predictions, and outputs the RMSE.
 
@@ -97,7 +97,7 @@ getRMSE(x_test, y_test)
 
 The generic run of our function did not produce an error code, so we're ready to move on to step 2.
 
-### 2.2. Test `getRMSE`
+#### 2.2. Test `getRMSE`
 
 Step 2 of task 2 is to generate response and predicted values for x, then process those values through our `getRMSE` function.
 
@@ -182,7 +182,7 @@ getRMSE_2(resp_NA, pred)
 
 ```
 
-### 2.3. Write `getMAE`
+#### 2.3. Write `getMAE`
 
 Similar to our `getRMSE` function, we will utilize a loop function to generate the iterative values of `x[i]` and `y[i]` in order to calculate the difference between them. Next we will take the absolute difference of these values, then determine their mean in order to determine the Mean Absolute Deviation (MAE).
 
@@ -202,7 +202,7 @@ getMAE(x_test, y_test)
 
 Conducting a generic test using the `x_test` and `y_test` vectors shows that the function did not produce an error. We are ready to further test our function.
 
-### 2.4. Test `getMAE`
+#### 2.4. Test `getMAE`
 
 Next, we will use the code provided to again generate vectors `resp` and `pred`. Seeing that this is the same code we used in Step 2, and that we did not alter either of the vectors in Step 2.2, we can safely pass these vectors through our`getMAE` function.
 
@@ -242,7 +242,7 @@ getMAE_2(resp_NA, pred)
 
 ```
 
-### 2.5. Generate wrapper function `getRMSE_MAE`
+#### 2.5. Generate wrapper function `getRMSE_MAE`
 
 Now that we have established that our `getRMSE` and `getMAE` functions work properly, we will use them as helper functions inside of a wrapper function `getRMSE_MAE` that can be used to return either the RMSE, the MAE, or both results.
 
@@ -297,7 +297,7 @@ getRMSE_MAE(x_test, y_test)
 
 The function appears to be operational, so we are read to move on to the next step.
 
-### 2.6. Test the new wrapper function.
+#### 2.6. Test the new wrapper function.
 
 We will again use the provided code to generate response (`resp`) and prediction (`pred`) variables for use in testing our wrapper function.
 
@@ -375,9 +375,9 @@ getRMSE_MAE(resp_df, pred)
 
 We see that our screening criteria worked properly, generating an output message while displaying where the error in the function occurred. This error occurred due to the `if` statement testing `!is.atomic()` being `TRUE`, causing the associated `break` command to be executed.
 
-## Task 3: Querying an API and a Tidy-Style Function
+### Task 3: Querying an API and a Tidy-Style Function
 
-### 3.1. Using GET()
+#### 3.1. Using GET()
 
 Using `GET()` from the `httr` package, we will pull information from the "newsapi.org" website about a topic that has been in the news lately and store the information in variable \`site_raw_data\`.
 
@@ -389,7 +389,7 @@ site_raw_data
 
 The `GET()` function worked properly, so we are ready to move on to the next step.
 
-### 3.2. Parse the returned information
+#### 3.2. Parse the returned information
 
 Next we are going to parse our created variable `site_raw_data` into a data frame with the article information in it. When creating the data frame, we will ensure that the title, author, and description of the articles are listed first. We will also ensure to omit articles from our search that may have been removed by the host site. Lastly, we will sort the results to ensure the most recent articles are listed first.
 
@@ -406,7 +406,7 @@ articles
 
 The parsing and data frame generation was a success. We are now ready to combine these separate operations into a function to query articles.
 
-### 3.3. Write an API query function
+#### 3.3. Write an API query function
 
 Now that we have successfully retrieved and parsed the data into a tibble separately, we will write a quick function that allows the user to easily query the API using inputs for the title/subject, a time period for the search, and an API key.
 
